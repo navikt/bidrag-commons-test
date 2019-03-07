@@ -14,7 +14,7 @@ public class SecuredTestRestTemplate {
   private final TestRestTemplate testRestTemplate;
   private String testBearerToken;
 
-  SecuredTestRestTemplate(TestRestTemplate testRestTemplate) {
+  public SecuredTestRestTemplate(TestRestTemplate testRestTemplate) {
     this.testRestTemplate = testRestTemplate;
   }
 
