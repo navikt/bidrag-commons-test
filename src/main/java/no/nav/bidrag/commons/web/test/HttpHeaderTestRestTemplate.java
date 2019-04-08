@@ -1,9 +1,11 @@
 package no.nav.bidrag.commons.web.test;
 
+import static java.util.stream.Collectors.toMap;
+
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -13,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 public class HttpHeaderTestRestTemplate {
 
-  private final Set<HeaderGenerator> headerGenerators = new HashSet<>();
+  private final Map<String, ValueGenerator> headerGenerators = new HashMap<>();
   private final TestRestTemplate testRestTemplate;
 
   public HttpHeaderTestRestTemplate(TestRestTemplate testRestTemplate) {
@@ -22,7 +24,7 @@ public class HttpHeaderTestRestTemplate {
 
   public HttpHeaderTestRestTemplate(TestRestTemplate testRestTemplate, Collection<? extends HeaderGenerator> headerGenerators) {
     this(testRestTemplate);
-    this.headerGenerators.addAll(headerGenerators);
+    this.headerGenerators.putAll(headerGenerators.stream().collect(toMap(HeaderGenerator::getHeaderName, HeaderGenerator::getValueGenerator)));
   }
 
   public <T> ResponseEntity<T> exchange(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<T> responseClass) {
@@ -35,7 +37,7 @@ public class HttpHeaderTestRestTemplate {
 
   private HttpEntity<?> newEntityWithaddedHeaders(HttpEntity<?> httpEntity) {
     HttpHeaders tempHeaders = new HttpHeaders();
-    headerGenerators.forEach(headerGenerator -> tempHeaders.add(headerGenerator.getHeaderName(), headerGenerator.value()));
+    headerGenerators.forEach((key, value) -> tempHeaders.add(key, value.generate()));
 
     Optional.ofNullable(httpEntity).ifPresent(entity -> tempHeaders.putAll(entity.getHeaders()));
 
@@ -46,7 +48,11 @@ public class HttpHeaderTestRestTemplate {
   }
 
   public void add(HeaderGenerator headerGenerator) {
-    headerGenerators.add(headerGenerator);
+    headerGenerators.put(headerGenerator.headerName, headerGenerator.valueGenerator);
+  }
+
+  public void add(String headerName, ValueGenerator valueGenerator) {
+    headerGenerators.put(headerName, valueGenerator);
   }
 
   public static class HeaderGenerator {
@@ -65,6 +71,10 @@ public class HttpHeaderTestRestTemplate {
 
     String getHeaderName() {
       return headerName;
+    }
+
+    ValueGenerator getValueGenerator() {
+      return valueGenerator;
     }
   }
 
