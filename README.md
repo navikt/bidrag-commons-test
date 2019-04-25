@@ -5,6 +5,7 @@ Komponenter for testing som brukes på tvers av applikasjoner under bidrag
 
 versjon | beskrivelse
 --------|------------------------
+0.0.10  | Adding custom headers only valid for one HttpEntityCallback 
 0.0.9   | `HttpHeaderTestRestTemplate` med alternativ metode for å legge på en custom header
 0.0.6   | `HttpHeaderTestRestTemplate` som `SecuredTestRestTemplate` men der egne header verdier kan legges til
 0.0.4   | `SecuredTestRestTemplate` med public constructor

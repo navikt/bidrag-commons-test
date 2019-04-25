@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.List;
@@ -89,4 +90,52 @@ class HttpHeaderTestRestTemplateTest {
             .as("headerValue").contains("my custom header")
     );
   }
+
+  @Test
+  @DisplayName("skal legge til HEADER som bare er gyldig for èn HttpEntity callback")
+  void skalLeggeTilHeaderSomErGyldigForEnHttpEntityCallback() {
+    ParameterizedTypeReference<List<Object>> typeReference = new ParameterizedTypeReference<>() {
+    };
+
+    httpHeaderTestRestTemplate.addHeaderForSingleHttpEntityCallback("X-OnlyOnce", "WithValue");
+
+    assertAll(
+        () -> {
+          httpHeaderTestRestTemplate.exchange("somewhere", null, null, typeReference);
+
+          ArgumentCaptor<HttpEntity> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+          verify(testRestTemplateMock).exchange(anyString(), any(), entityCaptor.capture(), eq(typeReference));
+
+          assertThat(entityCaptor.getValue()).isNotNull();
+
+          var httpEntity = entityCaptor.getValue();
+
+          assertAll(
+              () -> assertThat(httpEntity.getHeaders()).as("headers").hasSize(2),
+              () -> assertThat(Objects.requireNonNull(httpEntity.getHeaders().get("X-Custom")).get(0))
+                  .as("Custom header value").contains("my custom header"),
+              () -> assertThat(Objects.requireNonNull(httpEntity.getHeaders().get("X-OnlyOnce")).get(0))
+                  .as("header for one callback").contains("WithValue")
+          );
+        }, () -> {
+          httpHeaderTestRestTemplate.exchange("somewhere", null, null, typeReference);
+
+          ArgumentCaptor<HttpEntity> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+          verify(testRestTemplateMock, times(2)).exchange(anyString(), any(), entityCaptor.capture(), eq(typeReference));
+
+          assertThat(entityCaptor.getValue()).isNotNull();
+
+          var httpEntity = entityCaptor.getValue();
+
+          assertAll(
+              () -> assertThat(httpEntity.getHeaders()).as("headers").hasSize(1),
+              () -> assertThat(Objects.requireNonNull(httpEntity.getHeaders().get("X-Custom")).get(0))
+                  .as("headerValue").contains("my custom header")
+          );
+
+        }
+    );
+
+  }
+
 }

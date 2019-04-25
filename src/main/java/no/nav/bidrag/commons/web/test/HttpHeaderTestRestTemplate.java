@@ -1,11 +1,9 @@
 package no.nav.bidrag.commons.web.test;
 
-import static java.util.stream.Collectors.toMap;
-
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Stack;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -15,16 +13,17 @@ import org.springframework.http.ResponseEntity;
 
 public class HttpHeaderTestRestTemplate {
 
-  private final Map<String, ValueGenerator> headerGenerators = new HashMap<>();
+  private final Stack<String[]> headersForSingleCallbacks = new Stack<>();
+  private final Map<String, ValueGenerator> valueGenerators = new HashMap<>();
   private final TestRestTemplate testRestTemplate;
 
   public HttpHeaderTestRestTemplate(TestRestTemplate testRestTemplate) {
     this.testRestTemplate = testRestTemplate;
   }
 
-  public HttpHeaderTestRestTemplate(TestRestTemplate testRestTemplate, Collection<? extends HeaderGenerator> headerGenerators) {
+  public HttpHeaderTestRestTemplate(TestRestTemplate testRestTemplate, Map<String, ValueGenerator> valueGenerators) {
     this(testRestTemplate);
-    this.headerGenerators.putAll(headerGenerators.stream().collect(toMap(HeaderGenerator::getHeaderName, HeaderGenerator::getValueGenerator)));
+    this.valueGenerators.putAll(valueGenerators);
   }
 
   public <T> ResponseEntity<T> exchange(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<T> responseClass) {
@@ -37,7 +36,12 @@ public class HttpHeaderTestRestTemplate {
 
   private HttpEntity<?> newEntityWithaddedHeaders(HttpEntity<?> httpEntity) {
     HttpHeaders tempHeaders = new HttpHeaders();
-    headerGenerators.forEach((key, value) -> tempHeaders.add(key, value.generate()));
+    valueGenerators.forEach((key, value) -> tempHeaders.add(key, value.generate()));
+
+    while (!headersForSingleCallbacks.empty()) {
+      String[] headerWithValue = headersForSingleCallbacks.pop();
+      tempHeaders.add(headerWithValue[0], headerWithValue[1]);
+    }
 
     Optional.ofNullable(httpEntity).ifPresent(entity -> tempHeaders.putAll(entity.getHeaders()));
 
@@ -47,35 +51,13 @@ public class HttpHeaderTestRestTemplate {
     );
   }
 
-  public void add(HeaderGenerator headerGenerator) {
-    headerGenerators.put(headerGenerator.headerName, headerGenerator.valueGenerator);
-  }
-
   public void add(String headerName, ValueGenerator valueGenerator) {
-    headerGenerators.put(headerName, valueGenerator);
+    valueGenerators.put(headerName, valueGenerator);
   }
 
-  public static class HeaderGenerator {
-
-    private final String headerName;
-    private final ValueGenerator valueGenerator;
-
-    public HeaderGenerator(String headerName, ValueGenerator valueGenerator) {
-      this.headerName = headerName;
-      this.valueGenerator = valueGenerator;
-    }
-
-    String value() {
-      return valueGenerator.generate();
-    }
-
-    String getHeaderName() {
-      return headerName;
-    }
-
-    ValueGenerator getValueGenerator() {
-      return valueGenerator;
-    }
+  public void addHeaderForSingleHttpEntityCallback(String headerName, String headerValue) {
+    String[] headerWithValue = {headerName, headerValue};
+    headersForSingleCallbacks.push(headerWithValue);
   }
 
   @FunctionalInterface
