@@ -21,11 +21,6 @@ public class HttpHeaderTestRestTemplate {
     this.testRestTemplate = testRestTemplate;
   }
 
-  public HttpHeaderTestRestTemplate(TestRestTemplate testRestTemplate, Map<String, ValueGenerator> valueGenerators) {
-    this(testRestTemplate);
-    this.valueGenerators.putAll(valueGenerators);
-  }
-
   public <T> ResponseEntity<T> exchange(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<T> responseClass) {
     return testRestTemplate.exchange(url, httpMethod, newEntityWithaddedHeaders(httpEntity), responseClass);
   }
