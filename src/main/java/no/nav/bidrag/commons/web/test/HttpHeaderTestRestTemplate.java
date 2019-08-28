@@ -29,6 +29,10 @@ public class HttpHeaderTestRestTemplate {
     return testRestTemplate.exchange(url, httpMethod, newEntityWithaddedHeaders(httpEntity), typeReference);
   }
 
+  public <T> ResponseEntity postForEntity(String url,  HttpEntity<?> httpEntity, Class<T> responseClass) {
+    return testRestTemplate.postForEntity(url, newEntityWithaddedHeaders(httpEntity), responseClass);
+  }
+
   private HttpEntity<?> newEntityWithaddedHeaders(HttpEntity<?> httpEntity) {
     HttpHeaders tempHeaders = new HttpHeaders();
     valueGenerators.forEach((key, value) -> tempHeaders.add(key, value.generate()));
