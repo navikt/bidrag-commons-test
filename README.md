@@ -5,7 +5,7 @@ Komponenter for testing som brukes på tvers av applikasjoner under bidrag
 
 versjon | endringstype | beskrivelse
 --------|--------------|-------------
-0.0.12  | endring      | `HttpHeaderTestRestTemplate`: slettet konstruktør (kun brukt av `SecuredTestRestTemplate`) 
+0.0.12  | endring      | `HttpHeaderTestRestTemplate.postForEntity(...)`
 0.0.12  | endring      | `HttpHeaderTestRestTemplate`: slettet konstruktør (kun brukt av `SecuredTestRestTemplate`) 
 0.0.11  | endring      | ny java baseline -> java 12
 0.0.10  | endring      | Adding custom headers only valid for one HttpEntityCallback 
