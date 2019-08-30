@@ -5,7 +5,7 @@
 
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-commons-test</artifactId>
-  <version>0.0.12-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <description>Bibliotek for test-komponenter som brukes på tvers av applikasjoner i no.nav.bidrag</description>
@@ -17,7 +17,6 @@
 
     <!-- dependencies -->
     <jackson.version>2.9.9.3</jackson.version>
-    <oidc-spring-support.version>0.2.18</oidc-spring-support.version>
     <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
 
     <!-- language -->
@@ -60,11 +59,6 @@
           <groupId>junit</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>no.nav.security</groupId>
-      <artifactId>oidc-test-support</artifactId>
-      <version>${oidc-spring-support.version}</version>
     </dependency>
 
     <!-- test -->

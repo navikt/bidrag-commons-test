@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -135,7 +136,56 @@ class HttpHeaderTestRestTemplateTest {
 
         }
     );
-
   }
 
+  @Nested
+  @DisplayName("... as secured testRestTemplate")
+  class Secured {
+
+    @BeforeEach
+    void addSecurityHeader() {
+      httpHeaderTestRestTemplate.add(HttpHeaders.AUTHORIZATION, () -> "Bearer secured");
+    }
+
+
+    @Test
+    @DisplayName("skal legge på OIDC token før exchange-kall med TestRestTemplate")
+    void skalLeggePaOidcToken() {
+      httpHeaderTestRestTemplate.exchange("somewhere", null, new HttpEntity<>(null, null), Object.class);
+
+      ArgumentCaptor<HttpEntity> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+      verify(testRestTemplateMock).exchange(anyString(), any(), entityCaptor.capture(), eq(Object.class));
+
+      assertThat(entityCaptor.getValue()).isNotNull();
+
+      var httpEntity = entityCaptor.getValue();
+
+      assertAll(
+          () -> assertThat(httpEntity.getHeaders()).as("headers").hasSize(2), // custom and security header
+          () -> assertThat(Objects.requireNonNull(httpEntity.getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0))
+              .as("token").contains("Bearer ")
+      );
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    @DisplayName("skal inititalisere ny HttpEntity når argument er null")
+    void skalInitialisereNyHttpEntityNaarArgumentErNull() {
+      httpHeaderTestRestTemplate.exchange("somewhere", null, null, new ParameterizedTypeReference<List<Object>>() {
+      });
+
+      ArgumentCaptor<HttpEntity> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+      verify(testRestTemplateMock).exchange(anyString(), any(), entityCaptor.capture(), any(ParameterizedTypeReference.class));
+
+      assertThat(entityCaptor.getValue()).isNotNull();
+
+      var httpEntity = entityCaptor.getValue();
+
+      assertAll(
+          () -> assertThat(httpEntity.getHeaders()).as("headers").hasSize(2), // custom and security header
+          () -> assertThat(Objects.requireNonNull(httpEntity.getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0))
+              .as("token").contains("Bearer ")
+      );
+    }
+  }
 }
