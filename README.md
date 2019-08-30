@@ -5,6 +5,7 @@ Komponenter for testing som brukes på tvers av applikasjoner under bidrag
 
 versjon | endringstype | beskrivelse
 --------|--------------|-------------
+0.1.0   | slettet      | `SecuredTestRestTemplate`: Fjernet avhengighet til spring-oidc-support fra nav 
 0.0.12  | endring      | `HttpHeaderTestRestTemplate.postForEntity(...)`
 0.0.12  | endring      | `HttpHeaderTestRestTemplate`: slettet konstruktør (kun brukt av `SecuredTestRestTemplate`) 
 0.0.11  | endring      | ny java baseline -> java 12
