@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-commons-test</artifactId>
   <version>0.1.2-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <organization>NAV (Arbeids- og velferdsdirektoratet) - The Norwegian Labour and Welfare Administration</organization>
+      <organizationUrl>https://www.nav.no</organizationUrl>
+    </developer>
+  </developers>
 
   <description>Bibliotek for test-komponenter som brukes på tvers av applikasjoner i no.nav.bidrag</description>
 
@@ -22,12 +37,22 @@
 
     <!-- plugins -->
     <maven-compiler.version>3.8.1</maven-compiler.version>
+    <maven-source.version>3.1.0</maven-source.version>
     <maven-surefire.version>2.22.0</maven-surefire.version>
   </properties>
 
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/navikt/bidrag-commons-test</url>
+    </repository>
+  </distributionManagement>
+
   <scm>
-    <url>https://github.com/navikt/bidrag-commons-test</url>
-    <developerConnection>scm:git:https://github.com/navikt/bidrag-commons-test</developerConnection>
+    <developerConnection>scm:git:git@github.com:navikt/bidrag-commons-test.git</developerConnection>
+    <connection>scm:git:git@github.com:navikt/bidrag-commons-test.git</connection>
+    <url>https://github.com/navikt/bidrag-commons-test.git</url>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencyManagement>
@@ -100,20 +125,6 @@
     </repository>
   </repositories>
 
-  <distributionManagement>
-    <repository>
-      <id>m2internal</id>
-      <name>NAV Maven2 Internal Repository</name>
-      <url>http://maven.adeo.no/nexus/content/repositories/m2internal</url>
-    </repository>
-    <snapshotRepository>
-      <id>m2snapshot</id>
-      <name>NAV Maven2 Snapshot Repository</name>
-      <url>http://maven.adeo.no/nexus/content/repositories/m2snapshot</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
-  </distributionManagement>
-
   <build>
     <plugins>
       <plugin>
@@ -127,6 +138,18 @@
         <configuration>
           <release>${java.version}</release>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source.version}</version>
+        <executions>
+          <execution>
+            <id>include-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
