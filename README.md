@@ -1,4 +1,7 @@
 # bidrag-commons-test
+
+ ![](https://github.com/navikt/bidrag-commons/workflows/continious%20integration%20on%20master/badge.svg)
+
 Komponenter for testing som brukes på tvers av applikasjoner under bidrag
 
 ## continuous integration and deployment
