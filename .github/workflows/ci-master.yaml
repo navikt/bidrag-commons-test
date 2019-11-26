@@ -28,8 +28,13 @@ jobs:
             ${{ runner.os }}-maven-
       - name: verify that no dependencies is of type SNAPSHOT
         uses: navikt/bidrag-actions/verify-mvn-dependencies@master
-      - name: Run Maven release
+      - id: prepare
+        name: prepare release of maven package
+        uses: navikt/bidrag-actions/prepare-release-mvn-pkg@master
+      - name: release maven package
         uses: navikt/bidrag-actions/release-mvn-pkg@master
+        with:
+          new-snapshot-version: "${{ steps.prepare.outputs.new-snapshot-version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: commit new version
@@ -37,7 +42,7 @@ jobs:
         with:
           author_name: Tor Egil Jacobsen
           author_email: tor.egil.jacobsen@nav.no
-          message: "Bumped to new version after release"
+          message: "Bumped to new version after release of ${{ steps.prepare.outputs.tagged-release }}"
           path: "."
           pattern: "pom.xml"
           force: false
