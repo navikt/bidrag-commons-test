@@ -5,7 +5,7 @@
 
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-commons-test</artifactId>
-  <version>0.1.10-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <licenses>
@@ -30,7 +30,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- dependencies -->
-    <spring-boot.version>2.2.1.RELEASE</spring-boot.version>
+    <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
 
     <!-- language -->
     <java.version>12</java.version>
