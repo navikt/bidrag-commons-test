@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-java@v1
         with:
-          java-version: '12'
+          java-version: '13'
       - name: debug
         run: env
       - name: cache maven dependencies
@@ -23,5 +23,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: build & test with maven
-        run: |
-          mvn -B install
+        run:  mvn -B install
