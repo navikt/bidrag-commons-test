@@ -1,6 +1,6 @@
 # bidrag-commons-test
 
- ![](https://github.com/navikt/bidrag-commons-test/workflows/continious%20integration/badge.svg)
+ ![](https://github.com/navikt/bidrag-commons-test/workflows/maven%20deploy/badge.svg)
 
 Komponenter for testing som brukes på tvers av applikasjoner under bidrag
 
