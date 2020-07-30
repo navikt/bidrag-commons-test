@@ -80,17 +80,6 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>local-releases</id>
-      <name>Local stuff</name>
-      <url>https://repo.adeo.no/repository/maven-releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <build>
     <plugins>
       <plugin>
