@@ -12,6 +12,7 @@ Gjøres med 'workflows' og 'actions' fra GitHub. Se `.github/workflows/*` for de
 
 versjon | endringstype | beskrivelse
 --------|--------------|-------------
+0.2.2   | endring      | Fjernet sårbarheter rapportert av snyk.io og oppgradert spring-boot  
 0.2.1   | endring      | Fjernet sårbarheter rapportert av snyk.io 
 0.2.0   | -- ingen --  | Overgang til maven repo fra github 
 0.1.0   | slettet      | `SecuredTestRestTemplate`: Fjernet avhengighet til spring-oidc-support fra nav 
