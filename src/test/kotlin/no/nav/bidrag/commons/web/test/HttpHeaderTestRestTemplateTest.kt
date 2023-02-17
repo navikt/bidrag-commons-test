@@ -16,7 +16,6 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import java.util.*
 
-@DisplayName("HttpHeaderTestRestTemplateTest")
 internal class HttpHeaderTestRestTemplateTest {
 
     private lateinit var httpHeaderTestRestTemplate: HttpHeaderTestRestTemplate
@@ -30,8 +29,7 @@ internal class HttpHeaderTestRestTemplateTest {
     }
 
     @Test
-    @DisplayName("skal legge ved custom header verdi ved bruk")
-    fun skalLeggeVedCustomHeaderVerdiVedBruk() {
+    fun `exchange skal legge ved custom header verdi ved bruk`() {
         val slot = CapturingSlot<HttpEntity<*>>()
 
         httpHeaderTestRestTemplate.exchange("somewhere", null, HttpEntity<Any?>(null, null), Any::class.java)
@@ -46,8 +44,7 @@ internal class HttpHeaderTestRestTemplateTest {
     }
 
     @Test
-    @DisplayName("skal ikke overskrive eksisterende headere")
-    fun skalIkkeOverskriveEksisterendeHeadere() {
+    fun `exchange skal ikke overskrive eksisterende headere`() {
         val headers = HttpHeaders().apply { add("something", "completely different") }
         val slot = CapturingSlot<HttpEntity<*>>()
 
@@ -61,8 +58,7 @@ internal class HttpHeaderTestRestTemplateTest {
     }
 
     @Test
-    @DisplayName("skal inititalisere ny HttpEntity når argument er null")
-    fun skalInitialisereNyHttpEntityNaarArgumentErNull() {
+    fun `exchange skal inititalisere ny HttpEntity når argument er null`() {
         val typeReference: ParameterizedTypeReference<List<Any>> = ParameterizedTypeReference.forType(Any::class.java)
         val slot = CapturingSlot<HttpEntity<*>>()
 
@@ -78,8 +74,7 @@ internal class HttpHeaderTestRestTemplateTest {
     }
 
     @Test
-    @DisplayName("skal legge til HEADER som bare er gyldig for èn HttpEntity callback")
-    fun skalLeggeTilHeaderSomErGyldigForEnHttpEntityCallback() {
+    fun `exchange skal legge til HEADER som bare er gyldig for èn HttpEntity callback`() {
         val typeReference: ParameterizedTypeReference<List<Any>> = ParameterizedTypeReference.forType(Any::class.java)
 
         httpHeaderTestRestTemplate.addHeaderForSingleHttpEntityCallback("X-OnlyOnce", "WithValue")
@@ -111,8 +106,7 @@ internal class HttpHeaderTestRestTemplateTest {
         }
 
         @Test
-        @DisplayName("skal legge på OIDC token før exchange-kall med TestRestTemplate")
-        fun skalLeggePaOidcToken() {
+        fun `exchange skal legge på OIDC token før exchange-kall med TestRestTemplate`() {
             httpHeaderTestRestTemplate.exchange("somewhere", null, HttpEntity<Any?>(null, null), Any::class.java)
             val entityCaptor = CapturingSlot<HttpEntity<*>>()
             verify {
@@ -125,8 +119,7 @@ internal class HttpHeaderTestRestTemplateTest {
         }
 
         @Test
-        @DisplayName("skal inititalisere ny HttpEntity når argument er null")
-        fun skalInitialisereNyHttpEntityNaarArgumentErNull() {
+        fun `exchange skal inititalisere ny HttpEntity når argument er null`() {
             httpHeaderTestRestTemplate.exchange<List<Any>>("somewhere", null, null, ParameterizedTypeReference.forType(Any::class.java))
             val entityCaptor = CapturingSlot<HttpEntity<*>>()
             verify {
