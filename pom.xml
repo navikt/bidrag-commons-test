@@ -4,7 +4,7 @@
 
   <groupId>no.nav.bidrag</groupId>
   <artifactId>bidrag-commons-test</artifactId>
-  <version>0.2.3-SNAPSHOT</version>
+  <version>${sha1}${changelist}</version>
   <packaging>jar</packaging>
 
   <licenses>
@@ -24,19 +24,24 @@
   <description>Bibliotek for test-komponenter som brukes på tvers av applikasjoner i no.nav.bidrag</description>
 
   <properties>
+    <sha1/>
+    <changelist>-SNAPSHOT</changelist>
     <!-- build -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- dependencies -->
-    <spring-boot.version>2.5.6</spring-boot.version>
+    <spring-boot.version>2.7.8</spring-boot.version>
 
     <!-- language -->
-    <java.version>15</java.version>
+    <java.version>17</java.version>
 
     <!-- plugins -->
     <maven-compiler.version>3.8.1</maven-compiler.version>
-    <maven-surefire.version>2.22.0</maven-surefire.version>
+    <maven-surefire.version>2.22.2</maven-surefire.version>
+    <kotlin.version>1.8.10</kotlin.version>
+    <mockk.version>1.13.4</mockk.version>
+    <kotest.version>5.5.5</kotest.version>
   </properties>
 
   <distributionManagement>
@@ -98,6 +103,29 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+      <version>${kotlin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-test</artifactId>
+      <version>${kotlin.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.mockk</groupId>
+      <artifactId>mockk-jvm</artifactId>
+      <version>${mockk.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-runner-junit5-jvm</artifactId>
+      <version>${kotest.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -107,11 +135,37 @@
         <version>${maven-surefire.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-compiler.version}</version>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <sourceDirs>
+                <source>src/main/kotlin</source>
+              </sourceDirs>
+            </configuration>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
+            <configuration>
+              <sourceDirs>
+                <sourceDir>src/test/kotlin</sourceDir>
+              </sourceDirs>
+            </configuration>
+          </execution>
+        </executions>
         <configuration>
-          <release>${java.version}</release>
+          <jvmTarget>17</jvmTarget>
         </configuration>
       </plugin>
     </plugins>
