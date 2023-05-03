@@ -44,6 +44,18 @@ class HttpHeaderTestRestTemplate(val testRestTemplate: TestRestTemplate) {
         return testRestTemplate.exchange(uri, HttpMethod.POST, newEntityWithAddedHeaders(request))
     }
 
+    inline fun <reified T : Any> getForEntity(uri: String, request: Any? = null): ResponseEntity<T> {
+        return testRestTemplate.exchange(uri, HttpMethod.GET, newEntityWithAddedHeaders(request))
+    }
+
+    inline fun <reified T : Any> putForEntity(uri: String, request: Any? = null): ResponseEntity<T> {
+        return testRestTemplate.exchange(uri, HttpMethod.PUT, newEntityWithAddedHeaders(request))
+    }
+
+    inline fun <reified T : Any> postForEntity(uri: String, request: Any? = null): ResponseEntity<T> {
+        return testRestTemplate.exchange(uri, HttpMethod.POST, newEntityWithAddedHeaders(request))
+    }
+
     fun newEntityWithAddedHeaders(request: Any?): HttpEntity<*> {
         val tempHeaders = HttpHeaders().apply {
             valueGenerators.forEach { add(it.key, it.value.generate()) }
