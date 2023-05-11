@@ -52,6 +52,10 @@ class HttpHeaderTestRestTemplate(val testRestTemplate: TestRestTemplate) {
         return testRestTemplate.exchange(uri, HttpMethod.OPTIONS, newEntityWithAddedHeaders(request))
     }
 
+    inline fun <reified T : Any> delete(uri: URI): ResponseEntity<T> {
+        return testRestTemplate.exchange(uri, HttpMethod.DELETE, newEntityWithAddedHeaders())
+    }
+
     inline fun <reified T : Any> getForEntity(uri: String, request: Any? = null): ResponseEntity<T> {
         return testRestTemplate.exchange(uri, HttpMethod.GET, newEntityWithAddedHeaders(request))
     }
@@ -72,7 +76,11 @@ class HttpHeaderTestRestTemplate(val testRestTemplate: TestRestTemplate) {
         return testRestTemplate.exchange(uri, HttpMethod.OPTIONS, newEntityWithAddedHeaders(request))
     }
 
-    fun newEntityWithAddedHeaders(request: Any?): HttpEntity<*> {
+    inline fun <reified T : Any> delete(uri: String): ResponseEntity<T> {
+        return testRestTemplate.exchange(uri, HttpMethod.DELETE, newEntityWithAddedHeaders())
+    }
+
+    fun newEntityWithAddedHeaders(request: Any? = null): HttpEntity<*> {
         val tempHeaders = HttpHeaders().apply {
             valueGenerators.forEach { add(it.key, it.value.generate()) }
         }
