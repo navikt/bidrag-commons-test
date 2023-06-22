@@ -31,7 +31,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- dependencies -->
-    <spring-boot.version>2.7.8</spring-boot.version>
+    <spring-boot.version>3.0.8</spring-boot.version>
 
     <!-- language -->
     <java.version>17</java.version>
