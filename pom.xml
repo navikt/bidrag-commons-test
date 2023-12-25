@@ -39,7 +39,7 @@
     <!-- plugins -->
     <maven-compiler.version>3.8.1</maven-compiler.version>
     <maven-surefire.version>3.2.3</maven-surefire.version>
-    <kotlin.version>1.9.21</kotlin.version>
+    <kotlin.version>1.9.22</kotlin.version>
     <mockk.version>1.13.8</mockk.version>
     <kotest.version>5.8.0</kotest.version>
   </properties>
